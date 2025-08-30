@@ -127,6 +127,6 @@ This project is **private** and **not published on pub.dev**. Modify freely for 
 
 ---
 
-✅ **Pro Tip:** The app can be further enhanced with playlists, search functionality, and dark mode support for a more complete music player experience.
+✅ **further enhancement:** The app can be further enhanced with playlists, search functionality, and dark mode support for a more complete music player experience.
 
 ---
