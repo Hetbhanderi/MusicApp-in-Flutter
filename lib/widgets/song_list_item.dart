@@ -6,6 +6,7 @@ import 'package:musicplayer/screen/player_screen.dart';
 import 'package:musicplayer/utils/custom_text_style.dart';
 import 'package:musicplayer/widgets/m_button.dart';
 import 'package:musicplayer/widgets/m_container.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class SongListItem extends StatefulWidget {
   final LocalSongModel song;
@@ -42,15 +43,30 @@ class _SongListItemState extends State<SongListItem> {
               child: MContainer(
                 child: ListTile(
                   contentPadding: EdgeInsets.all(12),
-                  leading: Container(
+                  leading: SizedBox(
                     width: 50,
                     height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade800,
-                      borderRadius: BorderRadius.circular(8),
+                    child: QueryArtworkWidget(
+                      id: widget.song.id,
+                      type: ArtworkType.AUDIO,
+                      artworkFit: BoxFit.cover,
+                      artworkBorder: BorderRadius.circular(
+                        8,
+                      ), // ✅ rounded corners
+                      nullArtworkWidget: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800,
+                          borderRadius: BorderRadius.circular(
+                            8,
+                          ), // match rounded corners
+                        ),
+                        child: Icon(Icons.music_note, color: Colors.white54),
+                      ),
                     ),
-                    child: Icon(Icons.music_note, color: Colors.white54),
                   ),
+
                   title: Text(
                     widget.song.title,
                     style: myTextStyle15(),
@@ -77,7 +93,7 @@ class _SongListItemState extends State<SongListItem> {
                               ? Icons.pause_rounded
                               : Icons.play_arrow_rounded,
                           color: isCurrentSong && isPlaying
-                              ? Colors.black54
+                              ? AppColors.primary
                               : Colors.black54,
                           size: 27,
                         ),

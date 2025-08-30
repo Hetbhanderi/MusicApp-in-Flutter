@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/allsongscreen.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Music Player',
       home: AllSongsScreen(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

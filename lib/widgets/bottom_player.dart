@@ -27,143 +27,144 @@ class BottomPlayer extends StatelessWidget {
               ),
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary.withAlpha(100),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(21),
-                topRight: Radius.circular(21),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(188, 195, 225, 219),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white,
+                    offset: Offset(8, 8),
+                    blurRadius: 15,
+                    spreadRadius: 1,
+                  ),
+                  BoxShadow(
+                    color: Colors.white,
+                    offset: Offset(-8, -8),
+                    blurRadius: 15,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(8, 8),
-                  blurRadius: 15,
-                  spreadRadius: 1,
-                ),
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(-8, -8),
-                  blurRadius: 15,
-                  spreadRadius: 1,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  child: SizedBox(
-                    height: 20,
-                    child: Marquee(
-                      text: currentSong.title.split('/').last,
-                      blankSpace: 50,
-                      startPadding: 30,
-                      velocity: 10,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
                     ),
-                  ),
-                ),
-                StreamBuilder<Duration>(
-                  stream: audioController.audioPlayer.positionStream,
-                  builder: (context, snapshot) {
-                    final possition = snapshot.data ?? Duration.zero;
-                    final duration =
-                        audioController.audioPlayer.duration ?? Duration.zero;
-                    return Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-                      child: ProgressBar(
-                        progress: possition,
-                        total: duration,
-                        progressBarColor: Color(0xFF4A5668),
-                        baseBarColor: Colors.black,
-                        bufferedBarColor: Colors.black12,
-                        thumbColor: Color(0xFF4A5668),
-                        barHeight: 5,
-                        thumbRadius: 6,
-                        timeLabelLocation: TimeLabelLocation.none,
-                        onSeek: (duration) {
-                          audioController.audioPlayer.seek(duration);
-                        },
-                      ),
-                    );
-                  },
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      child: Lottie.asset(
-                        "assets/animation/Music fly.json",
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.cover,
+                    child: SizedBox(
+                      height: 20,
+                      child: Marquee(
+                        text: currentSong.title.split('/').last,
+                        blankSpace: 50,
+                        startPadding: 30,
+                        velocity: 10,
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(child: SizedBox()),
-                    Row(
-                      children: [
-                        MButton(
-                          blurFirstColor: Colors.white54,
-                          blurSecondColor: Colors.white54,
-                          btnBackGround: Colors.greenAccent.shade200,
-                          child: Icon(Icons.skip_previous_rounded),
-                          onpress: () {
-                            audioController.previousSong();
+                  ),
+                  StreamBuilder<Duration>(
+                    stream: audioController.audioPlayer.positionStream,
+                    builder: (context, snapshot) {
+                      final possition = snapshot.data ?? Duration.zero;
+                      final duration =
+                          audioController.audioPlayer.duration ?? Duration.zero;
+                      return Padding(
+                        padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
+                        child: ProgressBar(
+                          progress: possition,
+                          total: duration,
+                          progressBarColor: Color(0xFF4A5668),
+                          baseBarColor: Colors.black,
+                          bufferedBarColor: Colors.black12,
+                          thumbColor: Color(0xFF4A5668),
+                          barHeight: 5,
+                          thumbRadius: 6,
+                          timeLabelLocation: TimeLabelLocation.none,
+                          onSeek: (duration) {
+                            audioController.audioPlayer.seek(duration);
                           },
                         ),
-                        SizedBox(width: 16),
-                        StreamBuilder(
-                          stream: audioController.audioPlayer.playerStateStream,
-                          builder: (context, snapshot) {
-                            final playerstate = snapshot.data;
-                            final processingstate =
-                                playerstate?.processingState;
-                            final playing = playerstate?.playing;
-                            if (processingstate == ProcessingState.loading ||
-                                processingstate == ProcessingState.buffering) {
-                              return Container(
-                                margin: EdgeInsets.all(8),
-                                width: 32,
-                                height: 32,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColors.primary,
+                      );
+                    },
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        child: Lottie.asset(
+                          "assets/animation/Music fly.json",
+                          height: 60,
+                          width: 60,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 45,
+                        children: [
+                          MButton(
+                            blurFirstColor: Colors.white54,
+                            blurSecondColor: Colors.white54,
+                            btnBackGround: Colors.greenAccent.shade200,
+                            child: Icon(Icons.skip_previous_rounded),
+                            onpress: () {
+                              audioController.previousSong();
+                            },
+                          ),
+                          StreamBuilder(
+                            stream:
+                                audioController.audioPlayer.playerStateStream,
+                            builder: (context, snapshot) {
+                              final playerstate = snapshot.data;
+                              final processingstate =
+                                  playerstate?.processingState;
+                              final playing = playerstate?.playing;
+                              if (processingstate == ProcessingState.loading ||
+                                  processingstate ==
+                                      ProcessingState.buffering) {
+                                return Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: 32,
+                                  height: 32,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.primary,
+                                    ),
                                   ),
+                                );
+                              }
+                              return MButton(
+                                child: Icon(
+                                  playing == true
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
+                                  color: playing == true
+                                      ? AppColors.primary
+                                      : Colors.black,
                                 ),
+                                onpress: audioController.togglePlayPause,
                               );
-                            }
-                            return MButton(
-                              child: Icon(
-                                playing == true
-                                    ? Icons.pause_rounded
-                                    : Icons.play_arrow_rounded,
-                                color: playing == true
-                                    ? AppColors.primary
-                                    : Colors.black,
-                              ),
-                              onpress: audioController.togglePlayPause,
-                            );
-                          },
-                        ),
-                        SizedBox(width: 16),
-                        MButton(
-                          blurFirstColor: Colors.white54,
-                          blurSecondColor: Colors.white54,
-                          btnBackGround: Colors.greenAccent.shade200,
-                          child: Icon(Icons.skip_next_rounded),
-                          onpress: () {
-                            audioController.nextSong();
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                            },
+                          ),
+                          MButton(
+                            blurFirstColor: Colors.white54,
+                            blurSecondColor: Colors.white54,
+                            btnBackGround: Colors.greenAccent.shade200,
+                            child: Icon(Icons.skip_next_rounded),
+                            onpress: () {
+                              audioController.nextSong();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
