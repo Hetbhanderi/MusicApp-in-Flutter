@@ -18,7 +18,12 @@ class SongListItem extends StatefulWidget {
   State<SongListItem> createState() => _SongListItemState();
 }
 
-class _SongListItemState extends State<SongListItem> {
+class _SongListItemState extends State<SongListItem>
+    with AutomaticKeepAliveClientMixin {
+  // add this for artwork blinking problrm
+  @override
+  bool get wantKeepAlive => true; // add this for artwork blinking problrm
+
   String _formatSongDuretion(int milliseonds) {
     final minutes = (milliseonds / 60000).floor();
     final seconds = ((milliseonds % 60000) / 1000).floor();
@@ -27,7 +32,27 @@ class _SongListItemState extends State<SongListItem> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // add this for artwork
     final audioController = AudioController();
+
+    // ------------------------------- New Art Work Code-------------------------------
+    final artworkWidget = QueryArtworkWidget(
+      id: widget.song.id,
+      type: ArtworkType.AUDIO,
+      artworkFit: BoxFit.cover,
+      artworkBorder: BorderRadius.circular(8),
+      nullArtworkWidget: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade800,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Icon(Icons.music_note, color: Colors.white54),
+      ),
+    );
+    // -------------------------------end-------------------------------
+
     return ValueListenableBuilder(
       valueListenable: audioController.currentIndex,
       builder: (context, currentIndex, child) {
@@ -41,32 +66,39 @@ class _SongListItemState extends State<SongListItem> {
                 vertical: 6,
               ),
               child: MContainer(
+                // New Art Work Code
                 child: ListTile(
                   contentPadding: EdgeInsets.all(12),
                   leading: SizedBox(
                     width: 50,
                     height: 50,
-                    child: QueryArtworkWidget(
-                      id: widget.song.id,
-                      type: ArtworkType.AUDIO,
-                      artworkFit: BoxFit.cover,
-                      artworkBorder: BorderRadius.circular(
-                        8,
-                      ), // ✅ rounded corners
-                      nullArtworkWidget: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(
-                            8,
-                          ), // match rounded corners
-                        ),
-                        child: Icon(Icons.music_note, color: Colors.white54),
-                      ),
-                    ),
+                    child: artworkWidget,
                   ),
 
+                  // this cause artWork Blinking issue For taht change code
+                  // SizedBox(
+                  //   width: 50,
+                  //   height: 50,
+                  //   child: QueryArtworkWidget(
+                  //     id: widget.song.id,
+                  //     type: ArtworkType.AUDIO,
+                  //     artworkFit: BoxFit.cover,
+                  //     artworkBorder: BorderRadius.circular(
+                  //       8,
+                  //     ), // ✅ rounded corners
+                  //     nullArtworkWidget: Container(
+                  //       width: 50,
+                  //       height: 50,
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.grey.shade800,
+                  //         borderRadius: BorderRadius.circular(
+                  //           8,
+                  //         ), // match rounded corners
+                  //       ),
+                  //       child: Icon(Icons.music_note, color: Colors.white54),
+                  //     ),
+                  //   ),
+                  // ),
                   title: Text(
                     widget.song.title,
                     style: myTextStyle15(),
